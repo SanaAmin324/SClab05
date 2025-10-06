@@ -72,5 +72,37 @@ public class FilterTest {
      * different class. If you only need them in this test class, then keep them
      * in this test class.
      */
+    @Test
+public void testWrittenByCaseInsensitive() {
+    Tweet tweet = new Tweet(3, "Alice", "Hello world", d1);
+    List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet), "alice");
+    assertEquals(1, writtenBy.size());
+    assertTrue(writtenBy.contains(tweet));
+}
+
+@Test
+public void testInTimespanNoResults() {
+    Instant start = Instant.parse("2016-02-17T12:00:00Z");
+    Instant end = Instant.parse("2016-02-17T13:00:00Z");
+    List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet1, tweet2), new Timespan(start, end));
+    assertTrue(inTimespan.isEmpty());
+}
+
+@Test
+public void testContainingWordNotPresent() {
+    List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("xyz"));
+    assertTrue(containing.isEmpty());
+}
+
+@Test
+public void testContainingCaseInsensitive() {
+    Tweet tweet = new Tweet(4, "bob", "Java Programming", d1);
+    List<Tweet> containing = Filter.containing(Arrays.asList(tweet), Arrays.asList("java"));
+    assertEquals(1, containing.size());
+    assertTrue(containing.contains(tweet));
+}
+
 
 }
+
+
